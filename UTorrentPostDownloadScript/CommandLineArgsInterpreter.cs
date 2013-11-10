@@ -5,34 +5,39 @@ namespace UTorrentPostDownloadScript
 {
     public class CommandLineArgsInterpreter
     {
-        public static Arguments Parse(string[] args)
+        private readonly Dictionary<string, Action<Arguments, string>> _argumentMap;
+
+        public CommandLineArgsInterpreter()
+        {
+            _argumentMap = new Dictionary<string, Action<Arguments, string>>
+            {
+                {"f", (arguments, value) => arguments.NameOfDownloadedFileForSingleFileTorrents = value},
+                {"d", (arguments, value) => arguments.DirectoryWhereFilesAreSaved = value},
+                {"i", (arguments, value) => arguments.HexEndocdedInfoHash = value},
+                {"l", (arguments, value) => arguments.Label = value},
+                {"m", (arguments, value) => arguments.StatusMessage = value},
+                {"n", (arguments, value) => arguments.TitleOfTorrent = value},
+                {"t", (arguments, value) => arguments.Tracker = value},
+                {"k", (arguments, value) => ToEnum<KindOfTorrent>(value, v => arguments.KindOfTorrent = v)},
+                {"s", (arguments, value) => ToEnum<StateOfTorrent>(value, v => arguments.StateOfTorrent = v)},
+                {"p", (arguments, value) => ToEnum<StateOfTorrent>(value, v => arguments.PreviousStateOfTorrent = v)},
+            };
+        }
+
+        public Arguments Parse(string[] args)
         {
             var cliParams = BuildDictionaryOfInputParams(args);
 
-            var arguments = new Arguments();
-            var dictionary = new Dictionary<string, Action<string>>
-            {
-                {"f", value => arguments.NameOfDownloadedFileForSingleFileTorrents = value},
-                {"d", value => arguments.DirectoryWhereFilesAreSaved = value},
-                {"i", value => arguments.HexEndocdedInfoHash = value},
-                {"l", value => arguments.Label = value},
-                {"m", value => arguments.StatusMessage = value},
-                {"n", value => arguments.TitleOfTorrent = value},
-                {"t", value => arguments.Tracker = value},
-                {"k", value => ToEnum<KindOfTorrent>(value, v => arguments.KindOfTorrent = v)},
-                {"s", value => ToEnum<StateOfTorrent>(value, v => arguments.StateOfTorrent = v)},
-                {"p", value => ToEnum<StateOfTorrent>(value, v => arguments.PreviousStateOfTorrent = v)},
-            };
-
-            foreach (var commandLineKey in dictionary)
+            var argumentss = new Arguments();
+            foreach (var commandLineKey in _argumentMap)
             {
                 var rawValue = ValueOrDefault<string>(cliParams, "-" + commandLineKey.Key);
                 if (rawValue == null) continue;
-                
-                commandLineKey.Value(rawValue);
+
+                commandLineKey.Value(argumentss, rawValue);
             }
 
-            return arguments;
+            return argumentss;
         }
 
         private static void ToEnum<T>(string value, Action<T> action) where T : struct

@@ -4,7 +4,8 @@
     {
         static void Main(string[] args)
         {
-            var utorrentArgs = CommandLineArgsInterpreter.Parse(args);
+            var cliInterpreter = new CommandLineArgsInterpreter();
+            var utorrentArgs = cliInterpreter.Parse(args);
         }
     }
 
