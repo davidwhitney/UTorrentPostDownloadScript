@@ -45,8 +45,10 @@
   <ItemGroup>
     <Compile Include="Arguments.cs" />
     <Compile Include="CommandLineArgsInterpreter.cs" />
+    <Compile Include="KindOfTorrent.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StateOfTorrent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
