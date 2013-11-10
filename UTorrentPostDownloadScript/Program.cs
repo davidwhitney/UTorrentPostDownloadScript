@@ -12,7 +12,7 @@ namespace UTorrentPostDownloadScript
         public static void Main(string[] args)
         {
             var kernel = new StandardKernel(new Bindings());
-            var allActions = kernel.GetAll<IActOnCompletedTorrents>();
+            var allActions = kernel.GetAll<IActOnCompletedTorrents>().ToList();
             Main(args, new UtorrentCommandLineParameters(), allActions.ToList());
         }
 

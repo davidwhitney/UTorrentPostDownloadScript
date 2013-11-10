@@ -11,9 +11,9 @@ namespace UTorrentPostDownloadScript
         
         public void OnLoad(IKernel kernel)
         {
-            kernel.Bind(x => x.FromThisAssembly().SelectAllClasses().BindDefaultInterfaces());
-            kernel.Bind(x => x.FromAssemblyContaining<System.Configuration.Abstractions.IAppSettings>().SelectAllClasses().BindDefaultInterfaces());
-            kernel.Bind(x => x.FromAssemblyContaining<System.IO.Abstractions.FileSystem>().SelectAllClasses().BindDefaultInterfaces());
+            kernel.Bind(x => x.FromThisAssembly().SelectAllClasses().BindAllInterfaces());
+            kernel.Bind(x => x.FromAssemblyContaining<System.Configuration.Abstractions.IAppSettings>().SelectAllClasses().BindAllInterfaces());
+            kernel.Bind(x => x.FromAssemblyContaining<System.IO.Abstractions.FileSystem>().SelectAllClasses().BindAllInterfaces());
         }
 
         public void OnUnload(IKernel kernel)
