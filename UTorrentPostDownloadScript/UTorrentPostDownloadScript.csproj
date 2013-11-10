@@ -34,7 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.2\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Abstractions">
+      <HintPath>..\packages\System.Configuration.Abstractions.1.0.5058.39992\lib\net45\System.Configuration.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Features\ArgumentParsing\IParsableArguments.cs" />
+    <Compile Include="IActOnCompletedTorrents.cs" />
     <Compile Include="UtorrentApi\UtorrentCommandLineParameters.cs" />
     <Compile Include="Features\ArgumentParsing\ParsableArguments.cs" />
     <Compile Include="UtorrentApi\KindOfTorrent.cs" />
@@ -53,6 +61,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Features\JunkFileRemoval\" />
+    <Folder Include="Features\Renaming\" />
+    <Folder Include="Features\Sorting\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

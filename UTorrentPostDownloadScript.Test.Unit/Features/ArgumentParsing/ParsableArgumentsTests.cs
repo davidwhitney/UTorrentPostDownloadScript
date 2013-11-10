@@ -17,7 +17,7 @@ namespace UTorrentPostDownloadScript.Test.Unit.Features.ArgumentParsing
         }
 
         public class SomeClass
-        {
+        {   
             public string SomeProperty { get; set; }
         }
     }
