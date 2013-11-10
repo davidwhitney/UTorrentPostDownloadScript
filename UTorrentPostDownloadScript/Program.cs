@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Ninject;
 using UTorrentPostDownloadScript.Features.ArgumentParsing;
-using UTorrentPostDownloadScript.Features.Renaming;
 using UTorrentPostDownloadScript.UtorrentApi;
 
 namespace UTorrentPostDownloadScript

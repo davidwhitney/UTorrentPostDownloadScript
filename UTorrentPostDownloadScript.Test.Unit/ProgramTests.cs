@@ -17,12 +17,28 @@ namespace UTorrentPostDownloadScript.Test.Unit
         [SetUp]
         public void SetUp()
         {
-            _args = new string[] {};
+            _args = new[] {"-a", "%A"};
             _parameters = new Mock<IParsableArguments<UtorrentCommandLineParameters>>();
             _handlers = new List<IActOnCompletedTorrents>();
 
             _parsedParameters = new UtorrentCommandLineParameters();
             _parameters.Setup(x => x.Parse(_args)).Returns(_parsedParameters);
+        }
+
+        [Test]
+        public void WhenProgramExecutes_ArgsIsEmpty_DisplaysHelp()
+        {
+            Program.Main(new string[0], _parameters.Object, null);
+
+            _parameters.Verify(x=>x.GetHelp());
+        }
+
+        [Test]
+        public void WhenProgramExecutes_ArgsIsEmpty_ParseNotCalled()
+        {
+            Program.Main(new string[0], _parameters.Object, null);
+
+            _parameters.Verify(x=>x.Parse(It.IsAny<string[]>()), Times.Never);
         }
 
         [Test]
