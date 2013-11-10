@@ -1,6 +1,6 @@
 ﻿namespace UTorrentPostDownloadScript
 {
-    public class Arguments : ParsableArguments<Arguments>
+    public class UtorrentCommandLineParameters : ParsableArguments<UtorrentCommandLineParameters>
     {
         public string NameOfDownloadedFileForSingleFileTorrents { get; set; }
         public string DirectoryWhereFilesAreSaved { get; set; }
@@ -13,7 +13,7 @@
         public StateOfTorrent StateOfTorrent { get; set; }
         public KindOfTorrent KindOfTorrent { get; set; }
 
-        public Arguments()
+        public UtorrentCommandLineParameters()
         {
             Add("f", (arguments, value) => arguments.NameOfDownloadedFileForSingleFileTorrents = value);
             Add("d", (arguments, value) => arguments.DirectoryWhereFilesAreSaved = value);

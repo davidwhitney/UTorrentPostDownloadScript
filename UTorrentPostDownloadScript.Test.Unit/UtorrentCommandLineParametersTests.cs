@@ -2,22 +2,15 @@
 
 namespace UTorrentPostDownloadScript.Test.Unit
 {
-    /*
-
-Add this script to Preferences/Advances/Run Program:Run this program when a torrent finishes
-
-scriptcs PostDownload.csx -- -f %F -d %D -n %N -p %P -l %L -t %T -m %m -i %I -s %S -k %K
-    */
-
     [TestFixture]
-    public class ArgumentsTests
+    public class UtorrentCommandLineParametersTests
     {
-        private Arguments _cliInterpreter;
+        private UtorrentCommandLineParameters _cliInterpreter;
 
         [SetUp]
         public void SetUp()
         {
-            _cliInterpreter = new Arguments();
+            _cliInterpreter = new UtorrentCommandLineParameters();
         }
 
         [Test]
