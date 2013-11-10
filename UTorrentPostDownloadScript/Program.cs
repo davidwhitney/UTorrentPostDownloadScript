@@ -27,30 +27,9 @@ namespace UTorrentPostDownloadScript
                 {"m", value => arguments.StatusMessage = value},
                 {"n", value => arguments.TitleOfTorrent = value},
                 {"t", value => arguments.Tracker = value},
-                {"k", value =>
-                {
-                    KindOfTorrent k;
-                    if (Enum.TryParse(value, true, out k))
-                    {
-                        arguments.KindOfTorrent = k;
-                    }
-                }},
-                {"s", value =>
-                {
-                    StateOfTorrent k;
-                    if (Enum.TryParse(value, true, out k))
-                    {
-                        arguments.StateOfTorrent = k;
-                    }
-                }},
-                {"p", value =>
-                {
-                    StateOfTorrent k;
-                    if (Enum.TryParse(value, true, out k))
-                    {
-                        arguments.PreviousStateOfTorrent = k;
-                    }
-                }},
+                {"k", value => ToEnum<KindOfTorrent>(value, v => arguments.KindOfTorrent = v)},
+                {"s", value => ToEnum<StateOfTorrent>(value, v => arguments.StateOfTorrent = v)},
+                {"p", value => ToEnum<StateOfTorrent>(value, v => arguments.PreviousStateOfTorrent = v)},
             };
 
             foreach (var commandLineKey in dictionary)
@@ -62,6 +41,15 @@ namespace UTorrentPostDownloadScript
             }
 
             return arguments;
+        }
+
+        public static void ToEnum<T>(string value, Action<T> action) where T : struct
+        {
+            T k;
+            if (Enum.TryParse(value, true, out k))
+            {
+                action(k);
+            }
         }
 
         private static Dictionary<string, string> BuildDictionaryOfInputParams(string[] args)
