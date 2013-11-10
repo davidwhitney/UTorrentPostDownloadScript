@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IParsableArguments.cs" />
     <Compile Include="UtorrentCommandLineParameters.cs" />
     <Compile Include="ParsableArguments.cs" />
     <Compile Include="KindOfTorrent.cs" />

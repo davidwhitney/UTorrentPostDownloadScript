@@ -5,7 +5,7 @@ using System.Text;
 
 namespace UTorrentPostDownloadScript
 {
-    public abstract class ParsableArguments<T> : Dictionary<string, Action<T, string>> where T : class, new()
+    public class ParsableArguments<T> : Dictionary<string, Action<T, string>>, IParsableArguments<T> where T : class, new()
     {
         public T Parse(string[] args) 
         {
@@ -67,17 +67,10 @@ namespace UTorrentPostDownloadScript
 
         private static T2 ValueOrDefault<T2>(IReadOnlyDictionary<string, string> src, string key)
         {
-            try
-            {
-                string value;
-                return src.TryGetValue(key, out value)
-                    ? (T2)Convert.ChangeType(value, typeof(T2))
-                    : default(T2);
-            }
-            catch
-            {
-                return default(T2);
-            }
+            string value;
+            return src.TryGetValue(key, out value)
+                ? (T2) Convert.ChangeType(value, typeof (T2))
+                : default(T2);
         }
     }
 }

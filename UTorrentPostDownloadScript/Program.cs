@@ -4,17 +4,20 @@ namespace UTorrentPostDownloadScript
 {
     public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            var cliInterpreter = new UtorrentCommandLineParameters();
+            Main(args, new UtorrentCommandLineParameters());
+        }
 
+        public static void Main(string[] args, IParsableArguments<UtorrentCommandLineParameters> supportedParameters)
+        {
             if (args.Length == 0)
             {
-                Console.WriteLine(cliInterpreter.GetHelp());
+                Console.WriteLine(supportedParameters.GetHelp());
                 return;
             }
 
-            var utorrentArgs = cliInterpreter.Parse(args);
+            var utorrentArgs = supportedParameters.Parse(args);
         }
     }
 }
