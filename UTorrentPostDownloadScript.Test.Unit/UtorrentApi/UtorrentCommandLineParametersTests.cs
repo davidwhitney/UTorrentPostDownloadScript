@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
+using UTorrentPostDownloadScript.UtorrentApi;
 
-namespace UTorrentPostDownloadScript.Test.Unit
+namespace UTorrentPostDownloadScript.Test.Unit.UtorrentApi
 {
     [TestFixture]
     public class UtorrentCommandLineParametersTests

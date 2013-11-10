@@ -1,4 +1,4 @@
-﻿namespace UTorrentPostDownloadScript
+﻿namespace UTorrentPostDownloadScript.UtorrentApi
 {
     public enum StateOfTorrent
     {

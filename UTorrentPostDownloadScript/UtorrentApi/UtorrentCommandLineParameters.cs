@@ -1,4 +1,6 @@
-﻿namespace UTorrentPostDownloadScript
+﻿using UTorrentPostDownloadScript.Features.ArgumentParsing;
+
+namespace UTorrentPostDownloadScript.UtorrentApi
 {
     public class UtorrentCommandLineParameters : ParsableArguments<UtorrentCommandLineParameters>
     {

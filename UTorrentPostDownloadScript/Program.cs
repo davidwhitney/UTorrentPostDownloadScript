@@ -1,4 +1,6 @@
 ﻿using System;
+using UTorrentPostDownloadScript.Features.ArgumentParsing;
+using UTorrentPostDownloadScript.UtorrentApi;
 
 namespace UTorrentPostDownloadScript
 {

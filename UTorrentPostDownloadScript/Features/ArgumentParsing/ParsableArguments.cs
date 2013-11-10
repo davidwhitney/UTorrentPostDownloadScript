@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace UTorrentPostDownloadScript
+namespace UTorrentPostDownloadScript.Features.ArgumentParsing
 {
     public class ParsableArguments<T> : Dictionary<string, Action<T, string>>, IParsableArguments<T> where T : class, new()
     {
