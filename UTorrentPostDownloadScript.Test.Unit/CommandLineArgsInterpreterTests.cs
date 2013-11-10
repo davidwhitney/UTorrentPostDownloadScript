@@ -79,5 +79,13 @@ scriptcs PostDownload.csx -- -f %F -d %D -n %N -p %P -l %L -t %T -m %m -i %I -s 
             Assert.That(args.StateOfTorrent, Is.EqualTo(state));
             Assert.That(args.PreviousStateOfTorrent, Is.EqualTo(state));
         }
+
+        [Test]
+        public void GetHelp_ReturnsPopulatedString()
+        {
+            var help = _cliInterpreter.GetHelp();
+
+            Assert.That(help.Length, Is.GreaterThan(0));
+        }
     }
 }

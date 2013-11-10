@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
 
 namespace UTorrentPostDownloadScript
 {
@@ -38,6 +40,20 @@ namespace UTorrentPostDownloadScript
             }
 
             return argumentss;
+        }
+
+        public string GetHelp()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("You need to configure UTorrentPostDownload script - add the following as the post torrent hook: " + Environment.NewLine);
+            sb.Append(Assembly.GetCallingAssembly().Location);
+            foreach (var item in _argumentMap)
+            {
+                sb.Append(" -" + item.Key + " %" + item.Key.ToUpper() + " ");
+            }
+
+            return sb.ToString().Trim();
         }
 
         private static void ToEnum<T>(string value, Action<T> action) where T : struct
