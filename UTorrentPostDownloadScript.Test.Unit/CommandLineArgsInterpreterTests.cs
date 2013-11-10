@@ -78,6 +78,30 @@ Stopped - 13*/
 
             Assert.That(args.KindOfTorrent, Is.EqualTo(kind));
         }
+
+        [TestCase(StateOfTorrent.Checked)]
+        [TestCase(StateOfTorrent.Downloading)]
+        [TestCase(StateOfTorrent.DownloadingF)]
+        [TestCase(StateOfTorrent.Error)]
+        [TestCase(StateOfTorrent.Finished)]
+        [TestCase(StateOfTorrent.Paused)]
+        [TestCase(StateOfTorrent.Queued)]
+        [TestCase(StateOfTorrent.QueuedSeed)]
+        [TestCase(StateOfTorrent.Seeding)]
+        [TestCase(StateOfTorrent.SeedingF)]
+        [TestCase(StateOfTorrent.Stopped)]
+        [TestCase(StateOfTorrent.SuperSeedF)]
+        [TestCase(StateOfTorrent.SuperSeeding)]
+        public void ParseArgs_CanMapStateOfTorrent_ReturnsDto(StateOfTorrent state)
+        {
+            var cliArgs = "-s " + (int)state + " -p " + (int)state;
+            var argsArray = cliArgs.Split(new[] { ' ' });
+
+            var args = CommandLineArgsInterpreter.Parse(argsArray);
+
+            Assert.That(args.StateOfTorrent, Is.EqualTo(state));
+            Assert.That(args.PreviousStateOfTorrent, Is.EqualTo(state));
+        }
     }
 
 }

@@ -27,7 +27,30 @@ namespace UTorrentPostDownloadScript
                 {"m", value => arguments.StatusMessage = value},
                 {"n", value => arguments.TitleOfTorrent = value},
                 {"t", value => arguments.Tracker = value},
-                {"k", value => arguments.KindOfTorrent = (KindOfTorrent)Enum.Parse(typeof(KindOfTorrent), value, true)},
+                {"k", value =>
+                {
+                    KindOfTorrent k;
+                    if (Enum.TryParse(value, true, out k))
+                    {
+                        arguments.KindOfTorrent = k;
+                    }
+                }},
+                {"s", value =>
+                {
+                    StateOfTorrent k;
+                    if (Enum.TryParse(value, true, out k))
+                    {
+                        arguments.StateOfTorrent = k;
+                    }
+                }},
+                {"p", value =>
+                {
+                    StateOfTorrent k;
+                    if (Enum.TryParse(value, true, out k))
+                    {
+                        arguments.PreviousStateOfTorrent = k;
+                    }
+                }},
             };
 
             foreach (var commandLineKey in dictionary)
