@@ -69,6 +69,22 @@ namespace UTorrentPostDownloadScript.Test.Unit.Features.Renaming
         }
 
         [Test]
+        public void Handle_MultipleConfigurations_DirectoryReferenceUpdatedCorrectly()
+        {
+            var @params = new UtorrentCommandLineParameters { DirectoryWhereFilesAreSaved = "c:\\something\\[Some Prefix][Some Prefix2]torrent" };
+            var settings = new NameValueCollection
+            {
+                {"RemoveSpuriousFilenameParts::SomePrefix", "[Some Prefix]"},
+                {"RemoveSpuriousFilenameParts::SomePrefix2", "[Some Prefix2]"}
+            };
+            SetupAppSettings(settings);
+
+            _rsfp.Handle(@params);
+
+            Assert.That(@params.DirectoryWhereFilesAreSaved, Is.EqualTo("c:\\something\\torrent"));
+        }
+
+        [Test]
         public void Handle_BadPartInConfiguration_BadPartRemovedWithARenameInFiles()
         {
             const string originalPath = "c:\\something\\[Some Prefix]torrent.jpg";
@@ -86,6 +102,22 @@ namespace UTorrentPostDownloadScript.Test.Unit.Features.Renaming
         {
             var @params = new UtorrentCommandLineParameters { NameOfDownloadedFileForSingleFileTorrents = "c:\\something\\[Some Prefix]torrent.jpg" };
             var settings = new NameValueCollection {{"RemoveSpuriousFilenameParts::SomePrefix", "[Some Prefix]"}};
+            SetupAppSettings(settings);
+
+            _rsfp.Handle(@params);
+
+            Assert.That(@params.NameOfDownloadedFileForSingleFileTorrents, Is.EqualTo("c:\\something\\torrent.jpg"));
+        }
+
+        [Test]
+        public void Handle_MultipleConfigurations_FileReferenceUpdatedCorrectly()
+        {
+            var @params = new UtorrentCommandLineParameters { NameOfDownloadedFileForSingleFileTorrents = "c:\\something\\[Some Prefix][Some Prefix2]torrent.jpg" };
+            var settings = new NameValueCollection
+            {
+                {"RemoveSpuriousFilenameParts::SomePrefix", "[Some Prefix]"},
+                {"RemoveSpuriousFilenameParts::SomePrefix2", "[Some Prefix2]"}
+            };
             SetupAppSettings(settings);
 
             _rsfp.Handle(@params);
