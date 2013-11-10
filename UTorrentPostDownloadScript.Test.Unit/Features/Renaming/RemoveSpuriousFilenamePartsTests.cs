@@ -15,13 +15,16 @@ namespace UTorrentPostDownloadScript.Test.Unit.Features.Renaming
         private AppSettingsExtended _appSettings;
         private Mock<IFileSystem> _mockFileSystem;
         private Mock<DirectoryBase> _mockDirectory;
+        private Mock<FileBase> _mockFile;
 
         [SetUp]
         public void SetUp()
         {
             _mockFileSystem = new Mock<IFileSystem>();
             _mockDirectory = new Mock<DirectoryBase>();
+            _mockFile = new Mock<FileBase>();
             _mockFileSystem.Setup(x => x.Directory).Returns(_mockDirectory.Object);
+            _mockFileSystem.Setup(x => x.File).Returns(_mockFile.Object);
             SetupAppSettings();
         }
 
@@ -63,6 +66,31 @@ namespace UTorrentPostDownloadScript.Test.Unit.Features.Renaming
             _rsfp.Handle(@params);
 
             Assert.That(@params.DirectoryWhereFilesAreSaved, Is.EqualTo("c:\\something\\torrent"));
+        }
+
+        [Test]
+        public void Handle_BadPartInConfiguration_BadPartRemovedWithARenameInFiles()
+        {
+            const string originalPath = "c:\\something\\[Some Prefix]torrent.jpg";
+            var @params = new UtorrentCommandLineParameters { NameOfDownloadedFileForSingleFileTorrents = originalPath };
+            var settings = new NameValueCollection {{"RemoveSpuriousFilenameParts::SomePrefix", "[Some Prefix]"}};
+            SetupAppSettings(settings);
+
+            _rsfp.Handle(@params);
+
+            _mockFile.Verify(x => x.Move(originalPath, "c:\\something\\torrent.jpg"));
+        }
+
+        [Test]
+        public void Handle_BadPartInConfiguration_FileReferenceUpdated()
+        {
+            var @params = new UtorrentCommandLineParameters { NameOfDownloadedFileForSingleFileTorrents = "c:\\something\\[Some Prefix]torrent.jpg" };
+            var settings = new NameValueCollection {{"RemoveSpuriousFilenameParts::SomePrefix", "[Some Prefix]"}};
+            SetupAppSettings(settings);
+
+            _rsfp.Handle(@params);
+
+            Assert.That(@params.NameOfDownloadedFileForSingleFileTorrents, Is.EqualTo("c:\\something\\torrent.jpg"));
         }
     }
 }
