@@ -1,0 +1,55 @@
+﻿using System.Collections.Specialized;
+using System.Configuration.Abstractions;
+using System.IO.Abstractions;
+using Moq;
+using NUnit.Framework;
+using UTorrentPostDownloadScript.Features.Renaming;
+using UTorrentPostDownloadScript.UtorrentApi;
+
+namespace UTorrentPostDownloadScript.Test.Unit.Features.Renaming
+{
+    [TestFixture]
+    public class RemoveSpuriousFilenamePartsTests
+    {
+        private RemoveSpuriousFilenameParts _rsfp;
+        private AppSettingsExtended _appSettings;
+        private Mock<IFileSystem> _mockFileSystem;
+        private Mock<DirectoryBase> _mockDirectory;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _mockFileSystem = new Mock<IFileSystem>();
+            _mockDirectory = new Mock<DirectoryBase>();
+            _mockFileSystem.Setup(x => x.Directory).Returns(_mockDirectory.Object);
+            SetupAppSettings();
+        }
+
+        private void SetupAppSettings(NameValueCollection nvc = null)
+        {
+            nvc = nvc ?? new NameValueCollection();
+            _appSettings = new AppSettingsExtended(nvc);
+            _rsfp = new RemoveSpuriousFilenameParts(_appSettings, _mockFileSystem.Object);
+        }
+
+        [Test]
+        public void Handle_NoConfiguration_NothingHappens()
+        {
+            var @params = new UtorrentCommandLineParameters {DirectoryWhereFilesAreSaved = "c:\\something\\torrent"};
+
+            _rsfp.Handle(@params);
+        }
+
+        [Test]
+        public void Handle_BadPartInConfiguration_BadPartRemovedWithARenameInDirectories()
+        {
+            var @params = new UtorrentCommandLineParameters { DirectoryWhereFilesAreSaved = "c:\\something\\[Some Prefix]torrent" };
+            var settings = new NameValueCollection {{"RemoveSpuriousFilenameParts::SomePrefix", "[Some Prefix]"}};
+            SetupAppSettings(settings);
+
+            _rsfp.Handle(@params);
+
+            _mockDirectory.Verify(x => x.Move(@params.DirectoryWhereFilesAreSaved, "c:\\something\\torrent"));
+        }
+    }
+}

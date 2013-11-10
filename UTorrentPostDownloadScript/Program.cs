@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Ninject;
 using UTorrentPostDownloadScript.Features.ArgumentParsing;
 using UTorrentPostDownloadScript.UtorrentApi;
@@ -12,7 +13,7 @@ namespace UTorrentPostDownloadScript
         {
             var kernel = new StandardKernel(new Bindings());
             var allActions = kernel.GetAll<IActOnCompletedTorrents>();
-            Main(args, new UtorrentCommandLineParameters(), allActions);
+            Main(args, new UtorrentCommandLineParameters(), allActions.ToList());
         }
 
         public static void Main(string[] args, IParsableArguments<UtorrentCommandLineParameters> supportedParameters, IEnumerable<IActOnCompletedTorrents> allActions)

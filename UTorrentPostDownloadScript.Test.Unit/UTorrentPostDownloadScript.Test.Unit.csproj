@@ -39,7 +39,15 @@
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Abstractions, Version=1.0.5058.39992, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Configuration.Abstractions.1.0.5058.39992\lib\net45\System.Configuration.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Abstractions">
+      <HintPath>..\packages\System.IO.Abstractions.1.4.0.68\lib\net35\System.IO.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Features\ArgumentParsing\ParsableArgumentsTests.cs" />
+    <Compile Include="Features\Renaming\RemoveSpuriousFilenamePartsTests.cs" />
     <Compile Include="ProgramTests.cs" />
     <Compile Include="UtorrentApi\UtorrentCommandLineParametersTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
