@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using log4net;
 using Moq;
 using NUnit.Framework;
 using UTorrentPostDownloadScript.Features.ArgumentParsing;
@@ -13,6 +14,7 @@ namespace UTorrentPostDownloadScript.Test.Unit
         private Mock<IParsableArguments<UtorrentCommandLineParameters>> _parameters;
         private IList<IActOnCompletedTorrents> _handlers;
         private UtorrentCommandLineParameters _parsedParameters;
+        private Mock<ILog> _logger;
 
         [SetUp]
         public void SetUp()
@@ -20,6 +22,7 @@ namespace UTorrentPostDownloadScript.Test.Unit
             _args = new[] {"-a", "%A"};
             _parameters = new Mock<IParsableArguments<UtorrentCommandLineParameters>>();
             _handlers = new List<IActOnCompletedTorrents>();
+            _logger = new Mock<ILog>();
 
             _parsedParameters = new UtorrentCommandLineParameters();
             _parameters.Setup(x => x.Parse(_args)).Returns(_parsedParameters);
@@ -28,7 +31,7 @@ namespace UTorrentPostDownloadScript.Test.Unit
         [Test]
         public void WhenProgramExecutes_ArgsIsEmpty_DisplaysHelp()
         {
-            Program.Main(new string[0], _parameters.Object, null);
+            Program.Main(new string[0], _parameters.Object, null, _logger.Object);
 
             _parameters.Verify(x=>x.GetHelp());
         }
@@ -36,7 +39,7 @@ namespace UTorrentPostDownloadScript.Test.Unit
         [Test]
         public void WhenProgramExecutes_ArgsIsEmpty_ParseNotCalled()
         {
-            Program.Main(new string[0], _parameters.Object, null);
+            Program.Main(new string[0], _parameters.Object, null, _logger.Object);
 
             _parameters.Verify(x=>x.Parse(It.IsAny<string[]>()), Times.Never);
         }
@@ -47,7 +50,7 @@ namespace UTorrentPostDownloadScript.Test.Unit
             var handler = new FakeHandler();
             _handlers.Add(handler);
 
-            Program.Main(_args, _parameters.Object, _handlers);
+            Program.Main(_args, _parameters.Object, _handlers, _logger.Object);
 
             Assert.That(handler.Called, Is.True);
         }
