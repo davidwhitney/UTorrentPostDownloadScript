@@ -1,4 +1,5 @@
-﻿using Ninject;
+﻿using log4net;
+using Ninject;
 using Ninject.Modules;
 using Ninject.Extensions.Conventions;
 
@@ -14,6 +15,7 @@ namespace UTorrentPostDownloadScript
             kernel.Bind(x => x.FromThisAssembly().SelectAllClasses().BindAllInterfaces());
             kernel.Bind(x => x.FromAssemblyContaining<System.Configuration.Abstractions.IAppSettings>().SelectAllClasses().BindAllInterfaces());
             kernel.Bind(x => x.FromAssemblyContaining<System.IO.Abstractions.FileSystem>().SelectAllClasses().BindAllInterfaces());
+            kernel.Bind<ILog>().ToMethod(x => LogManager.GetLogger("Log"));
         }
 
         public void OnUnload(IKernel kernel)
