@@ -17,6 +17,16 @@ namespace UTorrentPostDownloadScript.Features.ArgumentParsing
                 var rawValue = ValueOrDefault<string>(cliParams, "-" + commandLineKey.Key);
                 if (rawValue == null) continue;
 
+                if (rawValue.StartsWith("\""))
+                {
+                    rawValue = rawValue.Substring(1, rawValue.Length - 1);
+                }
+
+                if (rawValue.EndsWith("\""))
+                {
+                    rawValue = rawValue.Substring(0, rawValue.Length - 1);
+                }
+
                 commandLineKey.Value(argumentss, rawValue);
             }
 

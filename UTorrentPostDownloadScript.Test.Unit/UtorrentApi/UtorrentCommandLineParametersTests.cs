@@ -38,6 +38,22 @@ namespace UTorrentPostDownloadScript.Test.Unit.UtorrentApi
             Assert.That(args.TitleOfTorrent, Is.EqualTo("%N"));
         }
 
+        [Test]
+        public void ParseArgs_QuotedArgsProvided_ReturnsDtoWithoutQuotes()
+        {
+            const string cliArgs = "-f \"%F\" -d \"%D\" -n \"%N\" -p %P -l \"%L\" -t \"%T\" -m \"%M\" -i \"%I\" -s %S -k single";
+            var argsArray = cliArgs.Split(new[] { ' ' });
+
+            var args = _cliInterpreter.Parse(argsArray);
+
+            Assert.That(args.NameOfDownloadedFileForSingleFileTorrents, Is.EqualTo("%F"));
+            Assert.That(args.DirectoryWhereFilesAreSaved, Is.EqualTo("%D"));
+            Assert.That(args.HexEndocdedInfoHash, Is.EqualTo("%I"));
+            Assert.That(args.Label, Is.EqualTo("%L"));
+            Assert.That(args.StatusMessage, Is.EqualTo("%M"));
+            Assert.That(args.TitleOfTorrent, Is.EqualTo("%N"));
+        }
+
         [TestCase(KindOfTorrent.Single, "single")]
         [TestCase(KindOfTorrent.Multi, "multi")]
         public void ParseArgs_CanMapKindOfTorrent_ReturnsDto(KindOfTorrent kind, string cliParam)
