@@ -28,5 +28,17 @@ namespace UTorrentPostDownloadScript.UtorrentApi
             Add("s", (arguments, value) => ToEnum<StateOfTorrent>(value, v => arguments.StateOfTorrent = v));
             Add("p", (arguments, value) => ToEnum<StateOfTorrent>(value, v => arguments.PreviousStateOfTorrent = v));
         }
+
+        public override string GetHelp()
+        {
+            var inner = base.GetHelp();
+
+            inner = inner.Replace("%F", "'%F'");
+            inner = inner.Replace("%D", "'%D'");
+            inner = inner.Replace("%M", "'%M'");
+            inner = inner.Replace("%N", "'%N'");
+
+            return inner;
+        }
     }
 }

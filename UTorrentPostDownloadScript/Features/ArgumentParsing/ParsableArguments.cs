@@ -27,13 +27,23 @@ namespace UTorrentPostDownloadScript.Features.ArgumentParsing
                     rawValue = rawValue.Substring(0, rawValue.Length - 1);
                 }
 
+                if (rawValue.StartsWith("'"))
+                {
+                    rawValue = rawValue.Substring(1, rawValue.Length - 1);
+                }
+
+                if (rawValue.EndsWith("'"))
+                {
+                    rawValue = rawValue.Substring(0, rawValue.Length - 1);
+                }
+
                 commandLineKey.Value(argumentss, rawValue);
             }
 
             return argumentss;
         }
 
-        public string GetHelp()
+        public virtual string GetHelp()
         {
             var sb = new StringBuilder();
 
