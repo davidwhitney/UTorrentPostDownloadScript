@@ -43,13 +43,26 @@ namespace UTorrentPostDownloadScript.Test.Unit.Features.Renaming
         [Test]
         public void Handle_BadPartInConfiguration_BadPartRemovedWithARenameInDirectories()
         {
+            const string originalPath = "c:\\something\\[Some Prefix]torrent";
+            var @params = new UtorrentCommandLineParameters { DirectoryWhereFilesAreSaved = originalPath };
+            var settings = new NameValueCollection {{"RemoveSpuriousFilenameParts::SomePrefix", "[Some Prefix]"}};
+            SetupAppSettings(settings);
+
+            _rsfp.Handle(@params);
+
+            _mockDirectory.Verify(x => x.Move(originalPath, "c:\\something\\torrent"));
+        }
+
+        [Test]
+        public void Handle_BadPartInConfiguration_DirectoryReferenceUpdated()
+        {
             var @params = new UtorrentCommandLineParameters { DirectoryWhereFilesAreSaved = "c:\\something\\[Some Prefix]torrent" };
             var settings = new NameValueCollection {{"RemoveSpuriousFilenameParts::SomePrefix", "[Some Prefix]"}};
             SetupAppSettings(settings);
 
             _rsfp.Handle(@params);
 
-            _mockDirectory.Verify(x => x.Move(@params.DirectoryWhereFilesAreSaved, "c:\\something\\torrent"));
+            Assert.That(@params.DirectoryWhereFilesAreSaved, Is.EqualTo("c:\\something\\torrent"));
         }
     }
 }

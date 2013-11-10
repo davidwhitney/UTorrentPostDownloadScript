@@ -27,10 +27,25 @@ namespace UTorrentPostDownloadScript.Features.Renaming
                 return;
             }
 
-            var dest = badParts.Aggregate(parameters.DirectoryWhereFilesAreSaved,
-                (current, badPart) => current.Replace(badPart, string.Empty));
+            if (!string.IsNullOrWhiteSpace(parameters.DirectoryWhereFilesAreSaved))
+            {
+                var dest = badParts.Aggregate(parameters.DirectoryWhereFilesAreSaved,
+                    (current, badPart) => current.Replace(badPart, string.Empty));
 
-            _fileSystem.Directory.Move(parameters.DirectoryWhereFilesAreSaved, dest);
+                _fileSystem.Directory.Move(parameters.DirectoryWhereFilesAreSaved, dest);
+                
+                parameters.DirectoryWhereFilesAreSaved = dest;
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameters.NameOfDownloadedFileForSingleFileTorrents))
+            {
+                var dest = badParts.Aggregate(parameters.NameOfDownloadedFileForSingleFileTorrents,
+                    (current, badPart) => current.Replace(badPart, string.Empty));
+
+                _fileSystem.File.Move(parameters.NameOfDownloadedFileForSingleFileTorrents, dest);
+
+                parameters.NameOfDownloadedFileForSingleFileTorrents = dest;
+            }
         }
     }
 }
