@@ -37,6 +37,12 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.2\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Conventions">
+      <HintPath>..\packages\Ninject.Extensions.Conventions.3.0.0.11\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Abstractions">
@@ -50,7 +56,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bindings.cs" />
     <Compile Include="Features\ArgumentParsing\IParsableArguments.cs" />
+    <Compile Include="Features\Renaming\RemoveSpuriousFilenameParts.cs" />
     <Compile Include="IActOnCompletedTorrents.cs" />
     <Compile Include="UtorrentApi\UtorrentCommandLineParameters.cs" />
     <Compile Include="Features\ArgumentParsing\ParsableArguments.cs" />
@@ -65,7 +73,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\JunkFileRemoval\" />
-    <Folder Include="Features\Renaming\" />
     <Folder Include="Features\Sorting\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
