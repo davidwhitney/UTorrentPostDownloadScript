@@ -1,6 +1,9 @@
-﻿namespace UTorrentPostDownloadScript
+﻿using System;
+using System.Collections.Generic;
+
+namespace UTorrentPostDownloadScript
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -12,21 +15,100 @@
     {
         public static Arguments Parse(string[] args)
         {
-            return new Arguments();
+            var cliParams = BuildDictionaryOfInputParams(args);
+
+            var arguments = new Arguments();
+            var dictionary = new Dictionary<string, Action<string>>
+            {
+                {"f", value => arguments.NameOfDownloadedFileForSingleFileTorrents = value},
+                {"d", value => arguments.DirectoryWhereFilesAreSaved = value},
+                {"i", value => arguments.HexEndocdedInfoHash = value},
+                {"l", value => arguments.Label = value},
+                {"m", value => arguments.StatusMessage = value},
+                {"n", value => arguments.TitleOfTorrent = value},
+                {"t", value => arguments.Tracker = value},
+                {"k", value => arguments.KindOfTorrent = (KindOfTorrent)Enum.Parse(typeof(KindOfTorrent), value, true)},
+            };
+
+            foreach (var commandLineKey in dictionary)
+            {
+                var rawValue = cliParams.ValueOrDefault<string>("-" + commandLineKey.Key);
+                if (rawValue == null) continue;
+                
+                commandLineKey.Value(rawValue);
+            }
+
+            return arguments;
+        }
+
+        private static Dictionary<string, string> BuildDictionaryOfInputParams(string[] args)
+        {
+            var parameters = new Dictionary<string, string>();
+            var lastKey = string.Empty;
+            for (var i = 0; i < args.Length; i++)
+            {
+                var item = args[i];
+                if ((i%2 == 0))
+                {
+                    lastKey = item;
+                }
+                else
+                {
+                    parameters.Add(lastKey, item);
+                }
+            }
+            return parameters;
+        }
+    }
+
+    public static class DictionaryExtensions
+    {
+        public static T ValueOrDefault<T>(this Dictionary<string, string> src, string key)
+        {
+            try
+            {
+                string value;
+                return src.TryGetValue(key, out value)
+                    ? (T) Convert.ChangeType(value, typeof (T))
+                    : default(T);
+            }
+            catch
+            {
+                return default(T);
+            }
         }
     }
 
     public class Arguments
     {
-        public string NameOfDownloadedFileForsingleFileTorrents { get; set; }
+        /// <summary>%F</summary>
+        public string NameOfDownloadedFileForSingleFileTorrents { get; set; }
+        
+        /// <summary>%D</summary>
         public string DirectoryWhereFilesAreSaved { get; set; }
+        
+        /// <summary>%N</summary>
         public string TitleOfTorrent { get; set; }
+        
+        /// <summary>%P</summary>
         public StateOfTorrent PreviousStateOfTorrent { get; set; }
+        
+        /// <summary>%L</summary>
         public string Label { get; set; }
+        
+        /// <summary>%T</summary>
         public string Tracker { get; set; }
+        
+        /// <summary>%M</summary>
         public string StatusMessage { get; set; }
+        
+        /// <summary>%I</summary>
         public string HexEndocdedInfoHash { get; set; }
+        
+        /// <summary>%S</summary>
         public StateOfTorrent StateOfTorrent { get; set; }
+        
+        /// <summary>%K</summary>
         public KindOfTorrent KindOfTorrent { get; set; }
     }
 
