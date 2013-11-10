@@ -10,14 +10,14 @@ scriptcs PostDownload.csx -- -f %F -d %D -n %N -p %P -l %L -t %T -m %m -i %I -s 
     */
 
     [TestFixture]
-    public class CommandLineArgsInterpreterTests
+    public class ArgumentsTests
     {
-        private CommandLineArgsInterpreter _cliInterpreter;
+        private Arguments _cliInterpreter;
 
         [SetUp]
         public void SetUp()
         {
-            _cliInterpreter = new CommandLineArgsInterpreter();
+            _cliInterpreter = new Arguments();
         }
 
         [Test]

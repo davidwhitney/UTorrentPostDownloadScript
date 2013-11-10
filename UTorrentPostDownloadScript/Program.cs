@@ -6,7 +6,7 @@ namespace UTorrentPostDownloadScript
     {
         static void Main(string[] args)
         {
-            var cliInterpreter = new CommandLineArgsInterpreter();
+            var cliInterpreter = new Arguments();
 
             if (args.Length == 0)
             {

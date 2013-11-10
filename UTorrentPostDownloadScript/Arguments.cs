@@ -1,35 +1,30 @@
 ﻿namespace UTorrentPostDownloadScript
 {
-    public class Arguments
+    public class Arguments : ParsableArguments<Arguments>
     {
-        /// <summary>%F</summary>
         public string NameOfDownloadedFileForSingleFileTorrents { get; set; }
-        
-        /// <summary>%D</summary>
         public string DirectoryWhereFilesAreSaved { get; set; }
-        
-        /// <summary>%N</summary>
         public string TitleOfTorrent { get; set; }
-        
-        /// <summary>%P</summary>
         public StateOfTorrent PreviousStateOfTorrent { get; set; }
-        
-        /// <summary>%L</summary>
         public string Label { get; set; }
-        
-        /// <summary>%T</summary>
         public string Tracker { get; set; }
-        
-        /// <summary>%M</summary>
         public string StatusMessage { get; set; }
-        
-        /// <summary>%I</summary>
         public string HexEndocdedInfoHash { get; set; }
-        
-        /// <summary>%S</summary>
         public StateOfTorrent StateOfTorrent { get; set; }
-        
-        /// <summary>%K</summary>
         public KindOfTorrent KindOfTorrent { get; set; }
+
+        public Arguments()
+        {
+            Add("f", (arguments, value) => arguments.NameOfDownloadedFileForSingleFileTorrents = value);
+            Add("d", (arguments, value) => arguments.DirectoryWhereFilesAreSaved = value);
+            Add("i", (arguments, value) => arguments.HexEndocdedInfoHash = value);
+            Add("l", (arguments, value) => arguments.Label = value);
+            Add("m", (arguments, value) => arguments.StatusMessage = value);
+            Add("n", (arguments, value) => arguments.TitleOfTorrent = value);
+            Add("t", (arguments, value) => arguments.Tracker = value);
+            Add("k", (arguments, value) => ToEnum<KindOfTorrent>(value, v => arguments.KindOfTorrent = v));
+            Add("s", (arguments, value) => ToEnum<StateOfTorrent>(value, v => arguments.StateOfTorrent = v));
+            Add("p", (arguments, value) => ToEnum<StateOfTorrent>(value, v => arguments.PreviousStateOfTorrent = v));
+        }
     }
 }

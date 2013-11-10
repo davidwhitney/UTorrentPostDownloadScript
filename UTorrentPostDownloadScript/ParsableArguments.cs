@@ -5,33 +5,14 @@ using System.Text;
 
 namespace UTorrentPostDownloadScript
 {
-    public class CommandLineArgsInterpreter
+    public abstract class ParsableArguments<T> : Dictionary<string, Action<T, string>> where T : class, new()
     {
-        private readonly Dictionary<string, Action<Arguments, string>> _argumentMap;
-
-        public CommandLineArgsInterpreter()
-        {
-            _argumentMap = new Dictionary<string, Action<Arguments, string>>
-            {
-                {"f", (arguments, value) => arguments.NameOfDownloadedFileForSingleFileTorrents = value},
-                {"d", (arguments, value) => arguments.DirectoryWhereFilesAreSaved = value},
-                {"i", (arguments, value) => arguments.HexEndocdedInfoHash = value},
-                {"l", (arguments, value) => arguments.Label = value},
-                {"m", (arguments, value) => arguments.StatusMessage = value},
-                {"n", (arguments, value) => arguments.TitleOfTorrent = value},
-                {"t", (arguments, value) => arguments.Tracker = value},
-                {"k", (arguments, value) => ToEnum<KindOfTorrent>(value, v => arguments.KindOfTorrent = v)},
-                {"s", (arguments, value) => ToEnum<StateOfTorrent>(value, v => arguments.StateOfTorrent = v)},
-                {"p", (arguments, value) => ToEnum<StateOfTorrent>(value, v => arguments.PreviousStateOfTorrent = v)},
-            };
-        }
-
-        public Arguments Parse(string[] args)
+        public T Parse(string[] args) 
         {
             var cliParams = BuildDictionaryOfInputParams(args);
 
-            var argumentss = new Arguments();
-            foreach (var commandLineKey in _argumentMap)
+            var argumentss = new T();
+            foreach (var commandLineKey in this)
             {
                 var rawValue = ValueOrDefault<string>(cliParams, "-" + commandLineKey.Key);
                 if (rawValue == null) continue;
@@ -48,7 +29,7 @@ namespace UTorrentPostDownloadScript
 
             sb.AppendLine("You need to configure UTorrentPostDownload script - add the following as the post torrent hook: " + Environment.NewLine);
             sb.Append(Assembly.GetCallingAssembly().Location);
-            foreach (var item in _argumentMap)
+            foreach (var item in this)
             {
                 sb.Append(" -" + item.Key + " %" + item.Key.ToUpper() + " ");
             }
@@ -56,7 +37,7 @@ namespace UTorrentPostDownloadScript
             return sb.ToString().Trim();
         }
 
-        private static void ToEnum<T>(string value, Action<T> action) where T : struct
+        protected static void ToEnum<T>(string value, Action<T> action) where T : struct
         {
             T k;
             if (Enum.TryParse(value, true, out k))
@@ -84,18 +65,18 @@ namespace UTorrentPostDownloadScript
             return parameters;
         }
 
-        private static T ValueOrDefault<T>(IReadOnlyDictionary<string, string> src, string key)
+        private static T2 ValueOrDefault<T2>(IReadOnlyDictionary<string, string> src, string key)
         {
             try
             {
                 string value;
                 return src.TryGetValue(key, out value)
-                    ? (T)Convert.ChangeType(value, typeof(T))
-                    : default(T);
+                    ? (T2)Convert.ChangeType(value, typeof(T2))
+                    : default(T2);
             }
             catch
             {
-                return default(T);
+                return default(T2);
             }
         }
     }

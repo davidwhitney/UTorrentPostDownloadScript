@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arguments.cs" />
-    <Compile Include="CommandLineArgsInterpreter.cs" />
+    <Compile Include="ParsableArguments.cs" />
     <Compile Include="KindOfTorrent.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
