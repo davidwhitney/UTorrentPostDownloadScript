@@ -62,6 +62,7 @@
     <Compile Include="Bindings.cs" />
     <Compile Include="Features\ArgumentParsing\IParsableArguments.cs" />
     <Compile Include="Features\Renaming\RemoveSpuriousFilenameParts.cs" />
+    <Compile Include="Features\Sorting\DetectAndSortTvSeries.cs" />
     <Compile Include="IActOnCompletedTorrents.cs" />
     <Compile Include="UtorrentApi\UtorrentCommandLineParameters.cs" />
     <Compile Include="Features\ArgumentParsing\ParsableArguments.cs" />
@@ -76,7 +77,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\JunkFileRemoval\" />
-    <Folder Include="Features\Sorting\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
