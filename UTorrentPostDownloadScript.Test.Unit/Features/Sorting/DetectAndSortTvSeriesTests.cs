@@ -35,10 +35,10 @@ namespace UTorrentPostDownloadScript.Test.Unit.Features.Sorting
             _dasts = new DetectAndSortTvSeries();
         }
 
-        [TestCase("SomeShow.S03E01")]
-        [TestCase("SomeShow.S3E1")]
-        [TestCase("SomeShow.S3E01")]
-        public void Handle_WhenDirectoryIsPatternedLikeATvShow_(string tvShowFormat)
+        [TestCase("SomeShow.S03E01", "c:\\something\\#TV\\SomeShow\\Season 3\\SomeShow.S03E01")]
+        [TestCase("SomeShow.S3E1", "c:\\something\\#TV\\SomeShow\\Season 3\\SomeShow.S3E1")]
+        [TestCase("SomeShow.S3E01", "c:\\something\\#TV\\SomeShow\\Season 3\\SomeShow.S3E01")]
+        public void Handle_WhenDirectoryIsPatternedLikeATvShow_(string tvShowFormat, string expectedLocation)
         {
             var originalDir = "c:\\something\\" + tvShowFormat;
             var @params = new UtorrentCommandLineParameters
@@ -48,7 +48,7 @@ namespace UTorrentPostDownloadScript.Test.Unit.Features.Sorting
 
             _dasts.Handle(@params);
 
-            _mockDirectory.Verify(x=>x.Move(originalDir, "c:\\something\\#TV\\SomeShow\\Season 3\\" + tvShowFormat));
+            _mockDirectory.Verify(x => x.Move(originalDir, expectedLocation));
         }
     }
 }
