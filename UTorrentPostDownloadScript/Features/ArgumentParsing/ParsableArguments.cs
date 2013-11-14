@@ -15,24 +15,18 @@ namespace UTorrentPostDownloadScript.Features.ArgumentParsing
             foreach (var commandLineKey in this)
             {
                 var rawValue = ValueOrDefault<string>(cliParams, "-" + commandLineKey.Key);
-                if (rawValue == null) continue;
 
-                if (rawValue.StartsWith("\""))
+                if (rawValue == null)
+                {
+                    continue;
+                }
+
+                if (rawValue.StartsWith("\"") || rawValue.StartsWith("'"))
                 {
                     rawValue = rawValue.Substring(1, rawValue.Length - 1);
                 }
 
-                if (rawValue.EndsWith("\""))
-                {
-                    rawValue = rawValue.Substring(0, rawValue.Length - 1);
-                }
-
-                if (rawValue.StartsWith("'"))
-                {
-                    rawValue = rawValue.Substring(1, rawValue.Length - 1);
-                }
-
-                if (rawValue.EndsWith("'"))
+                if (rawValue.EndsWith("\"") || rawValue.EndsWith("'"))
                 {
                     rawValue = rawValue.Substring(0, rawValue.Length - 1);
                 }
@@ -66,8 +60,10 @@ namespace UTorrentPostDownloadScript.Features.ArgumentParsing
             }
         }
 
-        private static Dictionary<string, string> BuildDictionaryOfInputParams(string[] args)
+        private static Dictionary<string, string> BuildDictionaryOfInputParams(string[] originalArgs)
         {
+            var args = FoldQuotedParamsTogether(originalArgs).ToArray();
+
             var parameters = new Dictionary<string, string>();
             var lastKey = string.Empty;
             for (var i = 0; i < args.Length; i++)
@@ -79,10 +75,51 @@ namespace UTorrentPostDownloadScript.Features.ArgumentParsing
                 }
                 else
                 {
+                    if (parameters.ContainsKey(lastKey))
+                    {
+                        throw new InvalidOperationException("Cannot add key '" + lastKey + "' with value '" + item + "' - it already exists in the parameter map.");
+                    }
+
                     parameters.Add(lastKey, item);
                 }
             }
             return parameters;
+        }
+
+        private static List<string> FoldQuotedParamsTogether(string[] args)
+        {
+            var compressedArgs = new List<string>();
+            var capturing = false;
+            var capturedValue = string.Empty;
+            foreach (var item in args)
+            {
+                if (item.StartsWith("\"") || item.StartsWith("'"))
+                {
+                    capturing = true;
+                }
+
+                if (!capturing)
+                {
+                    compressedArgs.Add(item);
+                    continue;
+                }
+
+                capturedValue = capturedValue + " " + item;
+
+
+                if (item.EndsWith("\"") || item.EndsWith("'"))
+                {
+                    capturing = false;
+                }
+
+                if (!capturing)
+                {
+                    compressedArgs.Add(capturedValue.Trim());
+                    capturedValue = string.Empty;
+                }
+            }
+
+            return compressedArgs;
         }
 
         private static T2 ValueOrDefault<T2>(IReadOnlyDictionary<string, string> src, string key)
