@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Diagnostics;
+using NUnit.Framework;
 using UTorrentPostDownloadScript.UtorrentApi;
 
 namespace UTorrentPostDownloadScript.Test.Unit.UtorrentApi
@@ -110,6 +111,8 @@ namespace UTorrentPostDownloadScript.Test.Unit.UtorrentApi
         public void GetHelp_ReturnsPopulatedString()
         {
             var help = _cliInterpreter.GetHelp();
+
+            Debug.WriteLine(help);
 
             Assert.That(help.Length, Is.GreaterThan(0));
         }

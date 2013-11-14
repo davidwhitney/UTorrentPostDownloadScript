@@ -51,7 +51,7 @@ namespace UTorrentPostDownloadScript.Features.ArgumentParsing
             sb.Append(Assembly.GetCallingAssembly().Location);
             foreach (var item in this)
             {
-                sb.Append(" -" + item.Key + " %" + item.Key.ToUpper() + " ");
+                sb.Append(" -" + item.Key + " '%" + item.Key.ToUpper() + "'");
             }
 
             return sb.ToString().Trim();

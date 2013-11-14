@@ -15,6 +15,19 @@ namespace UTorrentPostDownloadScript.Test.Unit.Features.ArgumentParsing
 
             Assert.That(parsed.SomeProperty, Is.EqualTo("value"));
         }
+        
+        [Test]
+        public void ParseArgs_SingleQuotedNullArgProvided_ReturnsDtoWithEmptyString()
+        {
+            var parser = new ParsableArguments<SomeClass>
+            {
+                { "a", (@class, s) => @class.SomeProperty = s }
+            };
+
+            var parsed = parser.Parse(new[] { "-a", "''" });
+
+            Assert.That(parsed.SomeProperty, Is.EqualTo(string.Empty));
+        }
 
         public class SomeClass
         {   
