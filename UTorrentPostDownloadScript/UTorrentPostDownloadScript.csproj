@@ -64,6 +64,7 @@
     <Compile Include="Features\Renaming\RemoveSpuriousFilenameParts.cs" />
     <Compile Include="Features\Sorting\DetectAndSortTvSeries.cs" />
     <Compile Include="IActOnCompletedTorrents.cs" />
+    <Compile Include="TorrentDownloadedAction.cs" />
     <Compile Include="UtorrentApi\UtorrentCommandLineParameters.cs" />
     <Compile Include="Features\ArgumentParsing\ParsableArguments.cs" />
     <Compile Include="UtorrentApi\KindOfTorrent.cs" />

@@ -62,7 +62,7 @@
     <Compile Include="Features\ArgumentParsing\ParsableArgumentsTests.cs" />
     <Compile Include="Features\Renaming\RemoveSpuriousFilenamePartsTests.cs" />
     <Compile Include="Features\Sorting\DetectAndSortTvSeriesTests.cs" />
-    <Compile Include="ProgramTests.cs" />
+    <Compile Include="TorrentDownloadedActionTests.cs" />
     <Compile Include="UtorrentApi\UtorrentCommandLineParametersTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

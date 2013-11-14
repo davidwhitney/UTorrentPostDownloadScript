@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using log4net;
 using Moq;
 using NUnit.Framework;
@@ -8,13 +9,15 @@ using UTorrentPostDownloadScript.UtorrentApi;
 namespace UTorrentPostDownloadScript.Test.Unit
 {
     [TestFixture]
-    public class ProgramTests
+    public class TorrentDownloadedActionTests
     {
         private string[] _args;
         private Mock<IParsableArguments<UtorrentCommandLineParameters>> _parameters;
         private IList<IActOnCompletedTorrents> _handlers;
         private UtorrentCommandLineParameters _parsedParameters;
         private Mock<ILog> _logger;
+
+        private TorrentDownloadedAction _action;
 
         [SetUp]
         public void SetUp()
@@ -26,31 +29,33 @@ namespace UTorrentPostDownloadScript.Test.Unit
 
             _parsedParameters = new UtorrentCommandLineParameters();
             _parameters.Setup(x => x.Parse(_args)).Returns(_parsedParameters);
+
+            _action = new TorrentDownloadedAction(_parameters.Object, _handlers, _logger.Object);
         }
 
         [Test]
-        public void WhenProgramExecutes_ArgsIsEmpty_DisplaysHelp()
+        public void Execute_ArgsIsEmpty_DisplaysHelp()
         {
-            Program.Main(new string[0], _parameters.Object, null, _logger.Object);
+            _action.Execute(new string[0]);
 
             _parameters.Verify(x=>x.GetHelp());
         }
 
         [Test]
-        public void WhenProgramExecutes_ArgsIsEmpty_ParseNotCalled()
+        public void Execute_ArgsIsEmpty_ParseNotCalled()
         {
-            Program.Main(new string[0], _parameters.Object, null, _logger.Object);
+            _action.Execute(new string[0]);
 
             _parameters.Verify(x=>x.Parse(It.IsAny<string[]>()), Times.Never);
         }
 
         [Test]
-        public void WhenProgramExecutes_AllHandlersAreCalled()
+        public void Execute_AllHandlersAreCalled()
         {
             var handler = new FakeHandler();
             _handlers.Add(handler);
 
-            Program.Main(_args, _parameters.Object, _handlers, _logger.Object);
+            _action.Execute(_args);
 
             Assert.That(handler.Called, Is.True);
         }
