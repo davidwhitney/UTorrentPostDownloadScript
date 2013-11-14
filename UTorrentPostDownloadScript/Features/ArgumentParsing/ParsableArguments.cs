@@ -5,6 +5,9 @@ using System.Text;
 
 namespace UTorrentPostDownloadScript.Features.ArgumentParsing
 {
+    /// <summary>
+    /// Not fond of the parameter folding in here - needs rework.
+    /// </summary>
     public class ParsableArguments<T> : Dictionary<string, Action<T, string>>, IParsableArguments<T> where T : class, new()
     {
         public T Parse(string[] args) 
@@ -51,16 +54,16 @@ namespace UTorrentPostDownloadScript.Features.ArgumentParsing
             return sb.ToString().Trim();
         }
 
-        protected static void ToEnum<T>(string value, Action<T> action) where T : struct
+        protected static void ToEnum<TItem>(string value, Action<TItem> action) where TItem : struct
         {
-            T k;
+            TItem k;
             if (Enum.TryParse(value, true, out k))
             {
                 action(k);
             }
         }
 
-        private static Dictionary<string, string> BuildDictionaryOfInputParams(string[] originalArgs)
+        private static Dictionary<string, string> BuildDictionaryOfInputParams(IEnumerable<string> originalArgs)
         {
             var args = FoldQuotedParamsTogether(originalArgs).ToArray();
 
@@ -86,7 +89,7 @@ namespace UTorrentPostDownloadScript.Features.ArgumentParsing
             return parameters;
         }
 
-        private static List<string> FoldQuotedParamsTogether(string[] args)
+        private static List<string> FoldQuotedParamsTogether(IEnumerable<string> args)
         {
             var compressedArgs = new List<string>();
             var capturing = false;
