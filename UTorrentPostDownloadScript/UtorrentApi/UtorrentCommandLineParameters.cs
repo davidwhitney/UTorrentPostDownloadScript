@@ -14,7 +14,7 @@ namespace UTorrentPostDownloadScript.UtorrentApi
         public string HexEndocdedInfoHash { get; set; }
         public StateOfTorrent StateOfTorrent { get; set; }
         public KindOfTorrent KindOfTorrent { get; set; }
-
+        
         public UtorrentCommandLineParameters()
         {
             Add("f", (arguments, value) => arguments.NameOfDownloadedFileForSingleFileTorrents = value);
@@ -27,6 +27,11 @@ namespace UTorrentPostDownloadScript.UtorrentApi
             Add("k", (arguments, value) => ToEnum<KindOfTorrent>(value, v => arguments.KindOfTorrent = v));
             Add("s", (arguments, value) => ToEnum<StateOfTorrent>(value, v => arguments.StateOfTorrent = v));
             Add("p", (arguments, value) => ToEnum<StateOfTorrent>(value, v => arguments.PreviousStateOfTorrent = v));
+        }
+
+        public TypeOfDownload KindOfDownload
+        {
+            get { return new TypeOfDownload(this); }
         }
     }
 }
